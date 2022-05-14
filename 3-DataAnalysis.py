@@ -4,7 +4,7 @@ from typing import Tuple, List
 import matplotlib.pyplot as plt
 import os
 from datetime import datetime
-
+#import pycountry
 
 def print_tabulate(df: pd.DataFrame):
     print(tabulate(df, headers=df.columns, tablefmt='orgtbl'))
@@ -77,8 +77,24 @@ def analysis(df: pd.DataFrame):
 
     df_mexico = df[df["Equipo"]=="Mexico"]
     df_mexico_deportes_oro = df_mexico.groupby(["Deporte"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
-    print_tabulate(df_mexico_deportes_oro)
-    df_mexico_deportes_oro.to_csv("csv/Practica3/mexico_deportes_oro.csv")
+    df_mexico_deportes_plata = df_mexico.groupby(["Deporte"])[["Medalla_Plata"]].aggregate(pd.DataFrame.sum)
+    df_mexico_deportes_bronce = df_mexico.groupby(["Deporte"])[["Medalla_Bronce"]].aggregate(pd.DataFrame.sum)
+
+    df_mexico_deportes_medallas = df_mexico_deportes_oro
+    df_mexico_deportes_medallas["Medalla_Plata"] = df_mexico_deportes_plata["Medalla_Plata"]
+    df_mexico_deportes_medallas["Medalla_Bronce"] = df_mexico_deportes_bronce["Medalla_Bronce"]
+
+    df_mexico_deportes_medallas["Total"] = df_mexico_deportes_oro["Medalla_Oro"]+df_mexico_deportes_plata["Medalla_Plata"]+df_mexico_deportes_bronce["Medalla_Bronce"]
+
+    print_tabulate(df_mexico_deportes_medallas)
+    df_mexico_deportes_medallas.to_csv("csv/Practica3/mexico_deportes_medallas.csv")
+
+    df_medallas_oro_edad = df.dropna(subset=["Edad"]).groupby(["Edad"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
+    
+    print_tabulate(df_medallas_oro_edad)
+    df_medallas_oro_edad.to_csv("csv/Practica3/medallas_oro_edad.csv")
+
+
 
 
     df_max_edad = df.dropna(subset=["Edad"])
@@ -92,6 +108,9 @@ def analysis(df: pd.DataFrame):
     df_min_edad = df_min_edad.dropna(subset=["Edad"])
     print_tabulate(df_min_edad.head(50))
     df_min_edad.to_csv("csv/Practica3/min_edad.csv")
+
+
+    
 
     
 
@@ -110,6 +129,38 @@ def analysis(df: pd.DataFrame):
     curtosis_edad = df.dropna(subset=["Edad"]).drop_duplicates(keep="first",subset=["Nombre","Edad"])
     curtosis_edad = curtosis_edad["Edad"].kurtosis()
     print(f"\nLa curtosis de las edades es de: {curtosis_edad}")
+
+    
+    df_jugadores_oro_mx = df_mexico.groupby(["Nombre","Genero"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
+    df_jugadores_plata_mx = df_mexico.groupby(["Nombre","Genero"])[["Medalla_Plata"]].aggregate(pd.DataFrame.sum)
+    df_jugadores_bronce_mx = df_mexico.groupby(["Nombre","Genero"])[["Medalla_Bronce"]].aggregate(pd.DataFrame.sum)
+
+    df_jugadores_medallas_mx = df_jugadores_oro_mx
+
+    df_jugadores_medallas_mx["Medallas"] = df_jugadores_bronce_mx["Medalla_Bronce"]+df_jugadores_plata_mx["Medalla_Plata"]+df_jugadores_oro_mx["Medalla_Oro"]
+    df_jugadores_medallas_mx = df_jugadores_medallas_mx.drop(['Medalla_Oro'], axis=1)
+
+    print_tabulate(df_jugadores_medallas_mx.head(100))
+    df_jugadores_medallas_mx.to_csv("csv/Practica3/jugadores_medallas_mx.csv")
+
+    
+
+   
+
+    df_jugadores_oro = df.groupby(["Nombre","Equipo"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
+    df_jugadores_plata = df.groupby(["Nombre","Equipo"])[["Medalla_Plata"]].aggregate(pd.DataFrame.sum)
+    df_jugadores_bronce = df.groupby(["Nombre","Equipo"])[["Medalla_Bronce"]].aggregate(pd.DataFrame.sum)
+
+    df_jugadores_medallas = df_jugadores_oro
+
+    df_jugadores_medallas["Medallas"] = df_jugadores_bronce["Medalla_Bronce"]+df_jugadores_plata["Medalla_Plata"]+df_jugadores_oro["Medalla_Oro"]
+    df_jugadores_medallas = df_jugadores_medallas.drop(['Medalla_Oro'], axis=1)
+
+    print_tabulate(df_jugadores_medallas.head(100))
+    df_jugadores_medallas.to_csv("csv/Practica3/jugadores_medallas.csv")
+   
+
+
     
     
 df = pd.read_csv('./csv/olimpicos_limpio.csv')

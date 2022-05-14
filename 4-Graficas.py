@@ -11,6 +11,8 @@ df_medallas_equipo = pd.read_csv("csv/Practica3/medallas_equipo.csv")
 df_medallas_equipo_total = pd.read_csv("csv/Practica3/medallas_equipo_total.csv")
 df_medallas_mexico = pd.read_csv("csv/Practica3/medallas_mexico.csv")
 
+
+
 if not os.path.exists("./graficas"):
         os.mkdir("./graficas")
 if not os.path.exists("./graficas/Practica4"):
