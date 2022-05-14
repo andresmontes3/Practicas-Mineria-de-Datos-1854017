@@ -24,7 +24,7 @@ df_medallas_equipo = df_medallas_equipo.drop(['Año'], axis=1)
 modl = ols("Medallas ~ Equipo", data=df_medallas_equipo).fit()
 anova_df = sm.stats.anova_lm(modl, typ=2)
 if anova_df["PR(>F)"][0] < 0.005:
-    print("\nSi hay diferencias")
+    print("\nSi hay diferencias en el número de medallas ganadas")
 else:
-    print("\nNo hay diferencias")
+    print("\nNo hay diferencias en el número de medallas ganadas")
 print(anova_df)

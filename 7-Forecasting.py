@@ -13,16 +13,15 @@ def print_tabulate(df: pd.DataFrame):
     print(tabulate(df, headers=df.columns, tablefmt="orgtbl"))
 
 def linear_regression(df,x,y):
-    model= sm.OLS(df[y],sm.add_constant(df_usa_año_int), alpha=0.1).fit()
+    model= sm.OLS(df[y],sm.add_constant(df_usa_año_int)).fit()
     print(model.summary())
 
     bands = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]
     coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
-    r_2_t = pd.read_html(model.summary().tables[0].as_html(),header=None,index_col=None)[0]
+    
     m=coef.values[1]
     b=coef.values[0]
-    r2=r_2_t.values[0][3]
-    r2_adj=r_2_t.values[1][3]
+    print(bands)
     low=bands['[0.025'][0]
     high=bands['0.975]'][0]
 
