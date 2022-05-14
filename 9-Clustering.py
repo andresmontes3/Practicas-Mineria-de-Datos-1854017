@@ -14,7 +14,7 @@ df_mx = df_mx.groupby(["Año"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
 df_usa = df_usa.groupby(["Año"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
 
 if not os.path.exists("./csv/Practica9"):
-        os.mkdir("./csv/Practica9")
+    os.mkdir("./csv/Practica9")
 
 df_mx.to_csv("csv/Practica9/mx_año_medallas_oro.csv")
 df_usa.to_csv("csv/Practica9/usa_año_medallas_oro.csv")
@@ -35,12 +35,8 @@ df_usa["Pais"]=["Estados Unidos" for x in df_usa["Año"]]
 
 df = pd.concat([df_mx, df_usa], ignore_index=True)
 
-#df.drop(df[df['Medalla_Oro'] == 0].index, inplace = True)
 
 print(df)
-
-plt.scatter(df_mx["Año"], df_mx["Medalla_Oro"], c='red', label ='Mexico')
-plt.scatter(df_usa["Año"], df_usa["Medalla_Oro"], c='blue', label ='Estados Unidos')
 
 
 def distancia_euclidiana(p1: np.array, p2: np.array):
@@ -72,6 +68,8 @@ def k_means(points,k):
     if not os.path.exists("./graficas/Practica9"):
         os.mkdir("./graficas/Practica9")
     plt.savefig("./graficas/Practica9/kmeans.png")
+    plt.ylabel("Medallas de Oro")
+    plt.xlabel("Año")
     plt.show()
     plt.close()
     return mean

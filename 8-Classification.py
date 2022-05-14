@@ -14,7 +14,7 @@ df_mx = df_mx.groupby(["Año"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
 df_usa = df_usa.groupby(["Año"])[["Medalla_Oro"]].aggregate(pd.DataFrame.sum)
 
 if not os.path.exists("./csv/Practica8"):
-        os.mkdir("./csv/Practica8")
+    os.mkdir("./csv/Practica8")
 
 df_mx.to_csv("csv/Practica8/mx_año_medallas_oro.csv")
 df_usa.to_csv("csv/Practica8/usa_año_medallas_oro.csv")
@@ -39,7 +39,9 @@ print(df)
 
 plt.scatter(df_mx["Año"], df_mx["Medalla_Oro"], c='red', label ='Mexico')
 plt.scatter(df_usa["Año"], df_usa["Medalla_Oro"], c='blue', label ='Estados Unidos')
-
+plt.ylabel("Medallas de Oro")
+plt.xlabel("Año")
+plt.legend()
 
 def distancia_euclidiana(p1: np.array, p2: np.array):
     return np.sqrt(np.sum((p2 - p1) ** 2))
